@@ -24,6 +24,15 @@ class Config(BaseSettings):
         LogLevel.INFO, title="Log level of the application's logger"
     )
 
+    use_fake_obsenv_manager: bool = Field(
+        False,
+        title="Use fake manager",
+        description=(
+            "In place of the real obsenv manager application, use one that"
+            " generates fake data."
+        ),
+    )
+
     model_config = SettingsConfigDict(
         env_prefix="OBSENV_API_", case_sensitive=False
     )

@@ -1,5 +1,6 @@
 """Handlers for the app's external root, ``/obsenv-api/``."""
 
+import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Depends
@@ -8,7 +9,8 @@ from safir.metadata import get_metadata
 from structlog.stdlib import BoundLogger
 
 from ..config import config
-from ..models import Index
+from ..factory import Factory
+from ..models import Index, PackageVersionsResponseModel
 
 __all__ = ["get_index", "external_router"]
 
@@ -50,3 +52,22 @@ async def get_index(
         application_name=config.name,
     )
     return Index(metadata=metadata)
+
+
+@external_router.get(
+    "/package_versions",
+    description="Get all the versions of the cloned packages.",
+    response_model=PackageVersionsResponseModel,
+    summary="Package versions",
+)
+async def package_versions(
+    logger: Annotated[BoundLogger, Depends(logger_dependency)],
+) -> PackageVersionsResponseModel:
+    """GET `/obsenv-api/package_versions` endpoint."""
+    factory = Factory(logger=logger)
+    service = factory.create_obsenv_manager_service()
+    pkg_list = service.get_package_versions()
+    fetch_datetime = datetime.datetime.now(datetime.UTC).isoformat()
+    return PackageVersionsResponseModel.from_domain(
+        fetch_datetime=fetch_datetime, pkg_list=pkg_list
+    )

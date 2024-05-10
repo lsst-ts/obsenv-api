@@ -1,0 +1,3 @@
+2024-05-09T23:15:46.545Z INFO  [ts_observing_environment::manage_obs_env] ts_externalscripts: 0.27.3
+2024-05-09T23:15:46.545Z INFO  [ts_observing_environment::manage_obs_env] ts_observatory_control: 0.33.0
+2024-05-09T23:15:46.545Z INFO  [ts_observing_environment::manage_obs_env] ts_standardscripts: 1.30.0
