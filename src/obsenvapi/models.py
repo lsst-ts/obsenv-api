@@ -28,15 +28,15 @@ class PackageVersions(BaseModel):
     """Package version information."""
 
     name: str = Field(
-        None, title="Package name", description="Name of the cloned package."
+        ..., title="Package name", description="Name of the cloned package."
     )
     current_version: str = Field(
-        None,
+        ...,
         title="Current version",
         description="The currently checked out version of a package.",
     )
     original_version: str = Field(
-        None,
+        ...,
         title="Original version",
         description="The original version of the cloned package.",
     )
@@ -44,8 +44,8 @@ class PackageVersions(BaseModel):
         False,
         title="Version difference.",
         description=(
-            "Flag to highlight is there is a difference between original and"
-            " current version."
+            "Flag to highlight is there is a difference between original and "
+            "current version."
         ),
     )
 
@@ -64,16 +64,16 @@ class PackageVersionsResponseModel(BaseModel):
     """Package version information."""
 
     fetch_datetime: str = Field(
-        None,
+        ...,
         title="Datetime of fetch",
         description=(
-            "The datetime ISO formatted string when the package versions were"
-            " fetched.",
+            "The datetime ISO formatted string when the package versions were "
+            "fetched."
         ),
     )
 
     packages: list[PackageVersions] = Field(
-        None,
+        default_factory=list,
         title="Package list",
         description="List of package version information objects.",
     )

@@ -5,7 +5,7 @@ from __future__ import annotations
 from structlog.stdlib import BoundLogger
 
 from ..domain.models import PackageInformation
-from ..storage.fake_obsenv_store import FakeObsenvStore
+from ..storage.store import Store
 
 __all__ = ["ObsenvManagerService"]
 
@@ -19,9 +19,7 @@ class ObsenvManagerService:
         The structlog logger.
     """
 
-    def __init__(
-        self, logger: BoundLogger, obsenv_store: FakeObsenvStore | None
-    ) -> None:
+    def __init__(self, logger: BoundLogger, obsenv_store: Store) -> None:
         self._logger = logger
         self._obsenv_store = obsenv_store
 

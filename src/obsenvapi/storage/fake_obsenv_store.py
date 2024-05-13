@@ -6,17 +6,16 @@ from structlog.stdlib import BoundLogger
 
 from ..domain.models import PackageInformation
 from .fake_commander import FakeCommander
-from .output_parser import OutputParser
+from .store import Store
 
 __all__ = ["FakeObsenvStore"]
 
 
-class FakeObsenvStore:
+class FakeObsenvStore(Store):
     """Handle creating information from fake data."""
 
     def __init__(self, logger: BoundLogger) -> None:
-        self._logger = logger
-        self._parser = OutputParser(logger=logger)
+        super().__init__(logger=logger)
         self._commander = FakeCommander(logger=logger)
 
     def get_package_versions(self) -> list[PackageInformation]:

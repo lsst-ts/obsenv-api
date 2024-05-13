@@ -5,6 +5,8 @@ from structlog.stdlib import BoundLogger
 from .config import config
 from .services.obsenv_manager_service import ObsenvManagerService
 from .storage.fake_obsenv_store import FakeObsenvStore
+from .storage.obsenv_store import ObsenvStore
+from .storage.store import Store
 
 
 class Factory:
@@ -19,9 +21,9 @@ class Factory:
             logger=self.logger, obsenv_store=self.create_obsenv_store()
         )
 
-    def create_obsenv_store(self) -> FakeObsenvStore | None:
+    def create_obsenv_store(self) -> Store:
         """Create an observer store."""
         if config.use_fake_obsenv_manager:
             return FakeObsenvStore(logger=self.logger)
         else:
-            return None
+            return ObsenvStore(logger=self.logger)
