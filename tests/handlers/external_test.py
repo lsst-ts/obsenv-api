@@ -29,5 +29,5 @@ async def test_get_package_versions(client: AsyncClient) -> None:
     response = await client.get("/obsenv-api/package_versions")
     assert response.status_code == 200
     data = response.json()
-    assert len(data["packages"]) == 3
+    assert len(data["packages"]) == 12
     assert isinstance(data["fetch_datetime"], str)
