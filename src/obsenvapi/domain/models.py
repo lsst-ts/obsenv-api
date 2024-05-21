@@ -21,4 +21,4 @@ class PackageInformation:
     """The original version set at a given point."""
 
     def is_different(self) -> bool:
-        return self.current_version == self.original_version
+        return self.current_version != self.original_version
