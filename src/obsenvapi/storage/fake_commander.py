@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import time
 from importlib.resources import files
 
 from structlog.stdlib import BoundLogger
@@ -23,9 +24,11 @@ class FakeCommander(Commander):
             .joinpath("original_versions.out")
             .read_text()
         )
+        time.sleep(5)
         cv = (
             files("obsenvapi.data")
             .joinpath("current_versions.out")
             .read_text()
         )
+        time.sleep(5)
         return ov, cv
