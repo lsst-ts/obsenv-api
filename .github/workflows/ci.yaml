@@ -73,8 +73,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: lsst-sqre/build-and-push-to-ghcr@v1
+      - uses: lsst-ts/build-and-push-to-rubincr@v1
         id: build
         with:
-          image: ${{ github.repository }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          image: obsenv-api
+          username: ${{ secrets.RUBINCR_USERNAME }}
+          password: ${{ secrets.RUBINCR_PASSWORD }}
