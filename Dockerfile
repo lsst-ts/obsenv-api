@@ -51,7 +51,7 @@ FROM base-image AS runtime-image
 
 # Create a non-root user
 RUN groupadd --gid 72089 obsenv && \
-  adduser -u 72091 -m -g 72089 -s /bin/bash obsenv
+  adduser --uid 72091 --gid 72089 --shell /bin/bash obsenv
 
 # Copy the virtualenv
 COPY --from=install-image /opt/venv /opt/venv
