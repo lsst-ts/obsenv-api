@@ -50,7 +50,8 @@ RUN pip install --no-cache-dir .
 FROM base-image AS runtime-image
 
 # Create a non-root user
-RUN useradd --create-home appuser
+RUN groupadd --gid 72089 obsenv && \
+  adduser --uid 72091 --gid 72089 --shell /bin/bash obsenv
 
 # Copy the virtualenv
 COPY --from=install-image /opt/venv /opt/venv
@@ -59,7 +60,7 @@ COPY --from=install-image /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Switch to the non-root user.
-USER appuser
+USER obsenv
 
 # Expose the port.
 EXPOSE 8080

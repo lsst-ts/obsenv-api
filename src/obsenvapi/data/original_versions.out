@@ -1,0 +1,12 @@
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] Spectractor: w.2023.42
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] atmospec: w.2023.42
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] cwfs: master
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] summit_extras: w.2023.42
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] summit_utils: w.2023.42
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] ts_config_attcs: 0.13.0
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] ts_config_ocs: 0.24.41
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] ts_externalscripts: 0.27.5
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] ts_observatory_control: 0.33.0
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] ts_observing_utilities: 0.4.4
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] ts_standardscripts: 1.30.0
+2024-05-21T18:17:28.222Z INFO  [ts_observing_environment::manage_obs_env] ts_wep: 9.5.0
