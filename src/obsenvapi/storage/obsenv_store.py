@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from structlog.stdlib import BoundLogger
 
-from obsenvapi.domain.models import PackageInformation
-
+from ..domain.models import PackageInformation
+from .obsenv_commander import ObsEnvCommander
 from .store import Store
 
 __all__ = ["ObsenvStore"]
@@ -16,11 +16,8 @@ class ObsenvStore(Store):
 
     def __init__(self, *, logger: BoundLogger) -> None:
         super().__init__(logger=logger)
-        self._commander = None
+        self._commander = ObsEnvCommander(logger=logger)
 
     def get_package_versions(self) -> list[PackageInformation]:
-        return [
-            PackageInformation(
-                name="test", current_version="1.0.0", original_version="1.0.0"
-            )
-        ]
+        ov, cv = self._commander.get_all_package_versions()
+        return self._parser.parse_double_pass(original=ov, current=cv)
