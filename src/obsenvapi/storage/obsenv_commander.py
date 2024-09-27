@@ -26,8 +26,10 @@ class ObsEnvCommander(Commander):
         cmd2 = ["manage_obs_env", "--action", "show-current-versions"]
 
         ov = sp.run(cmd1, stdout=sp.PIPE, stderr=sp.STDOUT, check=False)
-        self._logger.debug(ov)
+        decoded_ov = self.__decode_output(ov)
+        self._logger.debug(decoded_ov)
         cv = sp.run(cmd2, stdout=sp.PIPE, stderr=sp.STDOUT, check=False)
-        self._logger.debug(cv)
+        decoded_cv = self.__decode_output(cv)
+        self._logger.debug(decoded_cv)
 
-        return self.__decode_output(ov), self.__decode_output(cv)
+        return decoded_ov, decoded_cv
