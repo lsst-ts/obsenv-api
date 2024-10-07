@@ -27,8 +27,15 @@ apt-get update
 # Install build-essential because sometimes Python dependencies need to build
 # C modules, particularly when upgrading to newer Python versions.  libffi-dev
 # is sometimes needed to build cffi (a cryptography dependency).
-apt-get -y install --no-install-recommends build-essential libffi-dev
+apt-get -y install --no-install-recommends build-essential libffi-dev curl pkg-config libssl-dev
 
 # Delete cached files we don't need anymore:
 apt-get clean
 rm -rf /var/lib/apt/lists/*
+
+curl https://sh.rustup.rs -sSf | bash -s -- -y
+source $HOME/.cargo/env
+
+git clone https://github.com/tribeiro/ts_observing_environment
+cd ts_observing_environment
+cargo build --release

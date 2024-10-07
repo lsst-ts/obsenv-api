@@ -21,7 +21,7 @@ class OutputParser:
         self, original: str, current: str
     ) -> list[PackageInformation]:
         pkg_list = []
-        for line in original.strip().split(os.linesep):
+        for line in original.strip().split(os.linesep)[2:]:
             name_set, original_version = line.strip().split()[-2:]
             name = name_set.rstrip(":")
             pkg_list.append(
@@ -32,7 +32,7 @@ class OutputParser:
                 )
             )
 
-        for line in current.strip().split(os.linesep):
+        for line in current.strip().split(os.linesep)[2:]:
             name_set, current_version = line.strip().split()[-2:]
             name = name_set.rstrip(":")
             item = next((i for i in pkg_list if i.name == name), None)

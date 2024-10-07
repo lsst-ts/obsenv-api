@@ -22,7 +22,7 @@ class Factory:
         )
 
     def create_obsenv_store(self) -> Store:
-        """Create an observer store."""
+        """Create an obsenv store."""
         if config.use_fake_obsenv_manager:
             return FakeObsenvStore(logger=self.logger)
         else:
