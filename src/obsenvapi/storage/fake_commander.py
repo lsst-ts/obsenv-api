@@ -7,6 +7,7 @@ from importlib.resources import files
 
 from structlog.stdlib import BoundLogger
 
+from ..domain.models import PackageUpdate
 from .commander import Commander
 
 __all__ = ["FakeCommander"]
@@ -32,3 +33,10 @@ class FakeCommander(Commander):
         )
         time.sleep(5)
         return ov, cv
+
+    def update_package_version(self, _: PackageUpdate) -> str:
+        return (
+            files("obsenvapi.data")
+            .joinpath("update_package_ok.out")
+            .read_text()
+        )

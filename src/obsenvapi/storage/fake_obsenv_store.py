@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from structlog.stdlib import BoundLogger
 
-from ..domain.models import PackageInformation
+from ..domain.models import PackageInformation, PackageUpdate
 from .fake_commander import FakeCommander
 from .store import Store
 
@@ -23,3 +23,7 @@ class FakeObsenvStore(Store):
         return self._parser.parse_double_pass(
             original=fake_ov, current=fake_cv
         )
+
+    def update_package_version(self, info: PackageUpdate) -> bool:
+        output = self._commander.update_package_version(info)
+        return self._parser.parse_update_version(output)
