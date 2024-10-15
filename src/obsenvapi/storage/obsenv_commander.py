@@ -6,6 +6,8 @@ import subprocess as sp
 
 from structlog.stdlib import BoundLogger
 
+from obsenvapi.domain.models import PackageUpdate
+
 from .commander import Commander
 
 __all__ = ["ObsEnvCommander"]
@@ -33,3 +35,17 @@ class ObsEnvCommander(Commander):
         self._logger.debug(decoded_cv)
 
         return decoded_ov, decoded_cv
+
+    def update_package_version(self, info: PackageUpdate) -> str:
+        action = "checkout-version" if info.is_tag else "checkout-branch"
+        cmd = [
+            "manage_obs_env",
+            "--action",
+            action,
+            "--repository",
+            info.name.lower(),
+            "--branch-name",
+            info.version,
+        ]
+        output = sp.run(cmd, stdout=sp.PIPE, stderr=sp.STDOUT, check=False)
+        return self.__decode_output(output)
