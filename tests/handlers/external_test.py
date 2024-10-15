@@ -48,4 +48,26 @@ async def test_update_package_version(client: AsyncClient) -> None:
     )
     assert response.status_code == 200
     body = response.json()
-    assert body["message"] == "ts_config_ocs successfully updated"
+    assert body["msg"] == "ts_config_ocs successfully updated"
+
+
+@pytest.mark.asyncio
+async def test_bad_update_package_version(client: AsyncClient) -> None:
+    """Test ``POST /obsenv-api/update_package_version/``."""
+    config.use_fake_obsenv_manager = True
+    config.use_bad_package_version = True
+    change_version = {
+        "name": "ts_config_ocs",
+        "version": "v0.25.6",
+        "is_tag": True,
+        "username": "vera",
+    }
+    response = await client.post(
+        "/obsenv-api/update_package", json=change_version
+    )
+    assert response.status_code == 404
+    body = response.json()
+    assert (
+        body["detail"][0]["msg"]
+        == "ts_config_ocs could not be updated. Version v0.25.6 not found"
+    )

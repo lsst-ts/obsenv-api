@@ -3,9 +3,10 @@
 import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from safir.dependencies.logger import logger_dependency
 from safir.metadata import get_metadata
+from safir.models import ErrorDetail, ErrorLocation, ErrorModel
 from structlog.stdlib import BoundLogger
 
 from ..config import config
@@ -82,6 +83,9 @@ async def package_versions(
     "/update_package",
     description="Update a package to the requested version.",
     summary="Update package version",
+    responses={
+        404: {"description": "Version not found.", "model": ErrorModel}
+    },
 )
 async def update_package(
     logger: Annotated[BoundLogger, Depends(logger_dependency)],
@@ -94,5 +98,18 @@ async def update_package(
     if was_updated:
         message = f"{update_info.name} successfully updated"
     else:
-        message = f"{update_info.name} could not be updated"
-    return SimpleResponseModel(message=message)
+        message = (
+            f"{update_info.name} could not be updated. Version "
+            f"{update_info.version} not found"
+        )
+        error = ErrorDetail(
+            loc=[ErrorLocation.body, "version"],
+            msg=message,
+            type="unknown_version",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=[error.model_dump(exclude_none=True)],
+        )
+
+    return SimpleResponseModel(msg=message)

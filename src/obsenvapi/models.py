@@ -99,7 +99,7 @@ class PackageVersionsResponseModel(BaseModel):
 class SimpleResponseModel(BaseModel):
     "Simple response with just a message."
 
-    message: str = Field(
+    msg: str = Field(
         ..., title="Message", description="Message for the response."
     )
 
