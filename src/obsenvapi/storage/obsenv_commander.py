@@ -48,4 +48,5 @@ class ObsEnvCommander(Commander):
             info.version,
         ]
         output = sp.run(cmd, stdout=sp.PIPE, stderr=sp.STDOUT, check=False)
+        self._logger.debug(str(output))
         return self.__decode_output(output)
