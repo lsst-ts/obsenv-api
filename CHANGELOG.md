@@ -7,6 +7,12 @@ Find changes for the upcoming release in the project's [changelog.d directory](h
 
 <!-- scriv-insert-here -->
 
+## 0.2.0 (2024-10-21)
+
+### New features
+
+- Add ability to change package versions
+
 <a id='changelog-0.1.0'></a>
 ## 0.1.0 (2024-10-07)
 

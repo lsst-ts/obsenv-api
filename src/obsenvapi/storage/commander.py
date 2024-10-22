@@ -6,6 +6,8 @@ from abc import ABC, abstractmethod
 
 from structlog.stdlib import BoundLogger
 
+from ..domain.models import PackageUpdate
+
 __all__ = ["Commander"]
 
 
@@ -17,3 +19,6 @@ class Commander(ABC):
 
     @abstractmethod
     def get_all_package_versions(self) -> tuple[str, str]: ...
+
+    @abstractmethod
+    def update_package_version(self, info: PackageUpdate) -> str: ...

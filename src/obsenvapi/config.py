@@ -33,6 +33,15 @@ class Config(BaseSettings):
         ),
     )
 
+    use_bad_package_version: bool = Field(
+        False,
+        title="Use bad package version",
+        description=(
+            "In testing, generate an error by faking a bad package version "
+            "request."
+        ),
+    )
+
     model_config = SettingsConfigDict(
         env_prefix="OBSENV_API_", case_sensitive=False
     )

@@ -5,9 +5,15 @@ from typing import Self
 from pydantic import BaseModel, Field
 from safir.metadata import Metadata as SafirMetadata
 
-from .domain.models import PackageInformation
+from .domain.models import PackageInformation, PackageUpdate
 
-__all__ = ["Index", "PackageVersions", "PackageVersionsResponseModel"]
+__all__ = [
+    "Index",
+    "PackageVersions",
+    "PackageVersionsResponseModel",
+    "SimpleResponseModel",
+    "UpdatePackageVersion",
+]
 
 
 class Index(BaseModel):
@@ -88,3 +94,53 @@ class PackageVersionsResponseModel(BaseModel):
             for pkg_info in pkg_list
         ]
         return cls(fetch_datetime=fetch_datetime, packages=pkgs)
+
+
+class SimpleResponseModel(BaseModel):
+    "Simple response with just a message."
+
+    msg: str = Field(
+        ..., title="Message", description="Message for the response."
+    )
+
+
+class UpdatePackageVersion(BaseModel):
+    "Package update information."
+
+    name: str = Field(
+        ...,
+        title="Package name",
+        description="Name of package to update.",
+    )
+
+    version: str = Field(
+        ...,
+        title="Version",
+        description="Version to update package to.",
+    )
+
+    is_tag: bool = Field(
+        False,
+        title="Branch/Tag flag",
+        description=(
+            "A flag to determine if the version is a tag (True) or a branch "
+            "(False)."
+        ),
+    )
+
+    username: str = Field(
+        ...,
+        title="Username",
+        description="Username associated with the update request.",
+    )
+
+    def to_domain(self) -> PackageUpdate:
+        """Construct a PackageUpdate object with the update request
+        information.
+        """
+        return PackageUpdate(
+            name=self.name,
+            version=self.version,
+            is_tag=self.is_tag,
+            username=self.username,
+        )

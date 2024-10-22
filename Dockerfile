@@ -65,6 +65,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 # Switch to the non-root user.
 USER obsenv
 WORKDIR /home/obsenv
+RUN git config --global --add safe.directory /net/obs-env/auto_base_packages
 
 # Expose the port.
 EXPOSE 8080

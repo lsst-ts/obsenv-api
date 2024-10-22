@@ -3,14 +3,20 @@
 import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from safir.dependencies.logger import logger_dependency
 from safir.metadata import get_metadata
+from safir.models import ErrorDetail, ErrorLocation, ErrorModel
 from structlog.stdlib import BoundLogger
 
 from ..config import config
 from ..factory import Factory
-from ..models import Index, PackageVersionsResponseModel
+from ..models import (
+    Index,
+    PackageVersionsResponseModel,
+    SimpleResponseModel,
+    UpdatePackageVersion,
+)
 
 __all__ = ["get_index", "external_router"]
 
@@ -71,3 +77,39 @@ async def package_versions(
     return PackageVersionsResponseModel.from_domain(
         fetch_datetime=fetch_datetime, pkg_list=pkg_list
     )
+
+
+@external_router.post(
+    "/update_package",
+    description="Update a package to the requested version.",
+    summary="Update package version",
+    responses={
+        404: {"description": "Version not found.", "model": ErrorModel}
+    },
+)
+async def update_package(
+    logger: Annotated[BoundLogger, Depends(logger_dependency)],
+    update_info: UpdatePackageVersion,
+) -> SimpleResponseModel:
+    """POST `/obsenv-api/update_package` endpoint."""
+    factory = Factory(logger=logger)
+    service = factory.create_obsenv_manager_service()
+    was_updated = service.update_package_version(update_info.to_domain())
+    if was_updated:
+        message = f"{update_info.name} successfully updated"
+    else:
+        message = (
+            f"{update_info.name} could not be updated. Version "
+            f"{update_info.version} not found"
+        )
+        error = ErrorDetail(
+            loc=[ErrorLocation.body, "version"],
+            msg=message,
+            type="unknown_version",
+        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=[error.model_dump(exclude_none=True)],
+        )
+
+    return SimpleResponseModel(msg=message)
