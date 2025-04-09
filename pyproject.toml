@@ -104,8 +104,6 @@ target-version = "py312"
 
 [tool.ruff.lint]
 ignore = [
-    "ANN101",  # self should not have a type annotation
-    "ANN102",  # cls should not have a type annotation
     "ANN401",  # sometimes Any is the right type
     "ARG001",  # unused function arguments are often legitimate
     "ARG002",  # unused method arguments are often legitimate
@@ -134,9 +132,9 @@ ignore = [
     "S607",    # using PATH is not a security vulnerability
     "SIM102",  # sometimes the formatting of nested if statements is clearer
     "SIM117",  # sometimes nested with contexts are clearer
-    "TCH001",  # we decided to not maintain separate TYPE_CHECKING blocks
-    "TCH002",  # we decided to not maintain separate TYPE_CHECKING blocks
-    "TCH003",  # we decided to not maintain separate TYPE_CHECKING blocks
+    "TC001",  # we decided to not maintain separate TYPE_CHECKING blocks
+    "TC002",  # we decided to not maintain separate TYPE_CHECKING blocks
+    "TC003",  # we decided to not maintain separate TYPE_CHECKING blocks
     "TID252",  # if we're going to use relative imports, use them always
     "TRY003",  # good general advice but lint is way too aggressive
     "TRY301",  # sometimes raising exceptions inside try is the best flow
