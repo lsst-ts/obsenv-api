@@ -42,5 +42,5 @@ class OutputParser:
         return pkg_list
 
     def parse_update_version(self, output: str) -> bool:
-        self._logger.info(f"{"Application error" not in output}")
+        self._logger.info(f"{'Application error' not in output}")
         return "Application error" not in output
