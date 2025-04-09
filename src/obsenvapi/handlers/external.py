@@ -18,7 +18,7 @@ from ..models import (
     UpdatePackageVersion,
 )
 
-__all__ = ["get_index", "external_router"]
+__all__ = ["external_router", "get_index"]
 
 external_router = APIRouter()
 """FastAPI router for all external handlers."""
@@ -30,7 +30,6 @@ external_router = APIRouter()
         "Document the top-level API here. By default it only returns metadata"
         " about the application."
     ),
-    response_model=Index,
     response_model_exclude_none=True,
     summary="Application metadata",
 )
@@ -63,7 +62,6 @@ async def get_index(
 @external_router.get(
     "/package_versions",
     description="Get all the versions of the cloned packages.",
-    response_model=PackageVersionsResponseModel,
     summary="Package versions",
 )
 async def package_versions(
