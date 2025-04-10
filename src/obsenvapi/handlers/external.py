@@ -3,7 +3,7 @@
 import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from safir.dependencies.logger import logger_dependency
 from safir.metadata import get_metadata
 from safir.models import ErrorDetail, ErrorLocation, ErrorModel
@@ -66,11 +66,13 @@ async def get_index(
 )
 async def package_versions(
     logger: Annotated[BoundLogger, Depends(logger_dependency)],
+    request: Request,
 ) -> PackageVersionsResponseModel:
     """GET `/obsenv-api/package_versions` endpoint."""
     factory = Factory(logger=logger)
     service = factory.create_obsenv_manager_service()
-    pkg_list = service.get_package_versions()
+    userid = request.headers.get("Obsenv-User-Id")
+    pkg_list = service.get_package_versions(userid)
     fetch_datetime = datetime.datetime.now(datetime.UTC).isoformat()
     return PackageVersionsResponseModel.from_domain(
         fetch_datetime=fetch_datetime, pkg_list=pkg_list

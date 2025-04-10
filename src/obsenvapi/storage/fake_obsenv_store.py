@@ -18,8 +18,8 @@ class FakeObsenvStore(Store):
         super().__init__(logger=logger)
         self._commander = FakeCommander(logger=logger)
 
-    def get_package_versions(self) -> list[PackageInformation]:
-        fake_ov, fake_cv = self._commander.get_all_package_versions()
+    def get_package_versions(self, _: int) -> list[PackageInformation]:
+        fake_ov, fake_cv = self._commander.get_all_package_versions(0)
         return self._parser.parse_double_pass(
             original=fake_ov, current=fake_cv
         )
