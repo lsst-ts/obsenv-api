@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import os
 import subprocess as sp
+from typing import Any
 
 from structlog.stdlib import BoundLogger
 
@@ -23,14 +25,32 @@ class ObsEnvCommander(Commander):
         decoded_output = output.stdout.decode("utf-8")
         return decoded_output[:-1]
 
-    def get_all_package_versions(self) -> tuple[str, str]:
+    def __add_uid_to_env(self, userid: int) -> dict[str, Any]:
+        new_env = os.environ.copy()
+        new_env["SUDO_USER"] = userid
+        return new_env
+
+    def get_all_package_versions(self, userid: int) -> tuple[str, str]:
+        updated_env = self.__add_uid_to_env(userid)
         cmd1 = ["manage_obs_env", "--action", "show-original-versions"]
         cmd2 = ["manage_obs_env", "--action", "show-current-versions"]
 
-        ov = sp.run(cmd1, stdout=sp.PIPE, stderr=sp.STDOUT, check=False)
+        ov = sp.run(
+            cmd1,
+            stdout=sp.PIPE,
+            stderr=sp.STDOUT,
+            check=False,
+            env=updated_env,
+        )
         decoded_ov = self.__decode_output(ov)
         self._logger.debug(decoded_ov)
-        cv = sp.run(cmd2, stdout=sp.PIPE, stderr=sp.STDOUT, check=False)
+        cv = sp.run(
+            cmd2,
+            stdout=sp.PIPE,
+            stderr=sp.STDOUT,
+            check=False,
+            env=updated_env,
+        )
         decoded_cv = self.__decode_output(cv)
         self._logger.debug(decoded_cv)
 
@@ -47,6 +67,9 @@ class ObsEnvCommander(Commander):
             "--branch-name",
             info.version,
         ]
-        output = sp.run(cmd, stdout=sp.PIPE, stderr=sp.STDOUT, check=False)
+        updated_env = self.__add_uid_to_env(info.userid)
+        output = sp.run(
+            cmd, stdout=sp.PIPE, stderr=sp.STDOUT, check=False, env=updated_env
+        )
         self._logger.debug(str(output))
         return self.__decode_output(output)
