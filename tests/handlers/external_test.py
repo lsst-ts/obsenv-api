@@ -26,7 +26,13 @@ async def test_get_index(client: AsyncClient) -> None:
 async def test_get_package_versions(client: AsyncClient) -> None:
     """Test ``GET /obsenv-api/package_versions/``."""
     config.use_fake_obsenv_manager = True
-    response = await client.get("/obsenv-api/package_versions")
+    user_info = {
+        "Obsenv-User-Name": "vera",
+        "Obsenv-User-ID": "280723",
+    }
+    response = await client.get(
+        "/obsenv-api/package_versions", headers=user_info
+    )
     assert response.status_code == 200
     data = response.json()
     assert len(data["packages"]) == 12
@@ -42,6 +48,7 @@ async def test_update_package_version(client: AsyncClient) -> None:
         "version": "v0.25.6",
         "is_tag": True,
         "username": "vera",
+        "userid": "280723",
     }
     response = await client.post(
         "/obsenv-api/update_package", json=change_version
@@ -61,6 +68,7 @@ async def test_bad_update_package_version(client: AsyncClient) -> None:
         "version": "v0.25.6",
         "is_tag": True,
         "username": "vera",
+        "userid": "280723",
     }
     response = await client.post(
         "/obsenv-api/update_package", json=change_version
