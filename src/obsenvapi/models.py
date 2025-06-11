@@ -134,7 +134,7 @@ class UpdatePackageVersion(BaseModel):
         description="Username associated with the update request.",
     )
 
-    userid: int = Field(
+    userid: str = Field(
         ...,
         title="Userid",
         description="User ID associated with the update request.",

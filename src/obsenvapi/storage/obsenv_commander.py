@@ -8,8 +8,7 @@ from typing import Any
 
 from structlog.stdlib import BoundLogger
 
-from obsenvapi.domain.models import PackageUpdate
-
+from ..domain.models import PackageUpdate, UserInfo
 from .commander import Commander
 
 __all__ = ["ObsEnvCommander"]
@@ -25,13 +24,14 @@ class ObsEnvCommander(Commander):
         decoded_output = output.stdout.decode("utf-8")
         return decoded_output[:-1]
 
-    def __add_uid_to_env(self, userid: int) -> dict[str, Any]:
+    def __add_user_info_to_env(self, user_info: UserInfo) -> dict[str, Any]:
         new_env = os.environ.copy()
-        new_env["SUDO_UID"] = userid
+        new_env["SUDO_USER"] = user_info.uname
+        new_env["SUDO_UID"] = user_info.uid
         return new_env
 
-    def get_all_package_versions(self, userid: int) -> tuple[str, str]:
-        updated_env = self.__add_uid_to_env(userid)
+    def get_all_package_versions(self, user_info: UserInfo) -> tuple[str, str]:
+        updated_env = self.__add_user_info_to_env(user_info)
         self._logger.debug(f"Environment: {updated_env}")
         cmd1 = ["manage_obs_env", "--action", "show-original-versions"]
         cmd2 = ["manage_obs_env", "--action", "show-current-versions"]
@@ -68,7 +68,9 @@ class ObsEnvCommander(Commander):
             "--branch-name",
             info.version,
         ]
-        updated_env = self.__add_uid_to_env(info.userid)
+        updated_env = self.__add_user_info_to_env(
+            UserInfo(uname=info.username, uid=info.userid)
+        )
         output = sp.run(
             cmd, stdout=sp.PIPE, stderr=sp.STDOUT, check=False, env=updated_env
         )
