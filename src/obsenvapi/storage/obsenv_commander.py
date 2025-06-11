@@ -27,11 +27,12 @@ class ObsEnvCommander(Commander):
 
     def __add_uid_to_env(self, userid: int) -> dict[str, Any]:
         new_env = os.environ.copy()
-        new_env["SUDO_USER"] = userid
+        new_env["SUDO_UID"] = userid
         return new_env
 
     def get_all_package_versions(self, userid: int) -> tuple[str, str]:
         updated_env = self.__add_uid_to_env(userid)
+        self._logger.debug(f"Environment: {updated_env}")
         cmd1 = ["manage_obs_env", "--action", "show-original-versions"]
         cmd2 = ["manage_obs_env", "--action", "show-current-versions"]
 
