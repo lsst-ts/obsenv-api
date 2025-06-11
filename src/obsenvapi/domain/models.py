@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-__all__ = ["PackageInformation", "PackageUpdate"]
+__all__ = ["PackageInformation", "PackageUpdate", "UserInfo"]
 
 
 @dataclass(kw_only=True)
@@ -40,5 +40,16 @@ class PackageUpdate:
     username: str
     """The username associated with the package update request."""
 
-    userid: int
+    userid: str
     """The userid associated with the package update request."""
+
+
+@dataclass(kw_only=True)
+class UserInfo:
+    """User information."""
+
+    uname: str
+    """The username associated with request."""
+
+    uid: str
+    """The userid associated with request."""

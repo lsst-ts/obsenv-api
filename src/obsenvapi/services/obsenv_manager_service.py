@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from structlog.stdlib import BoundLogger
 
-from ..domain.models import PackageInformation, PackageUpdate
+from ..domain.models import PackageInformation, PackageUpdate, UserInfo
 from ..storage.store import Store
 
 __all__ = ["ObsenvManagerService"]
@@ -23,10 +23,12 @@ class ObsenvManagerService:
         self._logger = logger
         self._obsenv_store = obsenv_store
 
-    def get_package_versions(self, userid: int) -> list[PackageInformation]:
+    def get_package_versions(
+        self, user_info: UserInfo
+    ) -> list[PackageInformation]:
         self._logger.info("Retrive package versions from store.")
-        self._logger.info(f"Requested by {userid}")
-        return self._obsenv_store.get_package_versions(userid)
+        self._logger.info(f"Requested by {user_info.uname}")
+        return self._obsenv_store.get_package_versions(user_info)
 
     def update_package_version(self, info: PackageUpdate) -> bool:
         mess = [
