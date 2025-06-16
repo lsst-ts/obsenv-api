@@ -134,12 +134,6 @@ class UpdatePackageVersion(BaseModel):
         description="Username associated with the update request.",
     )
 
-    userid: str = Field(
-        ...,
-        title="Userid",
-        description="User ID associated with the update request.",
-    )
-
     def to_domain(self) -> PackageUpdate:
         """Construct a PackageUpdate object with the update request
         information.
@@ -149,5 +143,4 @@ class UpdatePackageVersion(BaseModel):
             version=self.version,
             is_tag=self.is_tag,
             username=self.username,
-            userid=self.userid,
         )

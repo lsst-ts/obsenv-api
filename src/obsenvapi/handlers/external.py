@@ -10,7 +10,6 @@ from safir.models import ErrorDetail, ErrorLocation, ErrorModel
 from structlog.stdlib import BoundLogger
 
 from ..config import config
-from ..domain.models import UserInfo
 from ..factory import Factory
 from ..models import (
     Index,
@@ -75,11 +74,7 @@ async def package_versions(
     username = request.headers.get("Obsenv-User-Name")
     if username is None:
         username = "nouser"
-    userid = request.headers.get("Obsenv-User-Id")
-    if userid is None:
-        userid = "999999"
-    user_info = UserInfo(uname=username, uid=userid)
-    pkg_list = service.get_package_versions(user_info)
+    pkg_list = service.get_package_versions(username)
     fetch_datetime = datetime.datetime.now(datetime.UTC).isoformat()
     return PackageVersionsResponseModel.from_domain(
         fetch_datetime=fetch_datetime, pkg_list=pkg_list

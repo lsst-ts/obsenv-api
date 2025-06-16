@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 
 from structlog.stdlib import BoundLogger
 
-from ..domain.models import PackageInformation, PackageUpdate, UserInfo
+from ..domain.models import PackageInformation, PackageUpdate
 from .output_parser import OutputParser
 
 __all__ = ["Store"]
@@ -21,7 +21,7 @@ class Store(ABC):
 
     @abstractmethod
     def get_package_versions(
-        self, user_info: UserInfo
+        self, username: str
     ) -> list[PackageInformation]: ...
 
     @abstractmethod

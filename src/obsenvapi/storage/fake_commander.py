@@ -8,7 +8,7 @@ from importlib.resources import files
 from structlog.stdlib import BoundLogger
 
 from ..config import config
-from ..domain.models import PackageUpdate, UserInfo
+from ..domain.models import PackageUpdate
 from .commander import Commander
 
 __all__ = ["FakeCommander"]
@@ -20,7 +20,7 @@ class FakeCommander(Commander):
     def __init__(self, *, logger: BoundLogger) -> None:
         super().__init__(logger=logger)
 
-    def get_all_package_versions(self, _: UserInfo) -> tuple[str, str]:
+    def get_all_package_versions(self, _: str) -> tuple[str, str]:
         ov = (
             files("obsenvapi.data")
             .joinpath("original_versions.out")
