@@ -38,4 +38,4 @@ class PackageUpdate:
     """Flag to determine if version is a tag (True) or a branch (False)."""
 
     username: str
-    """"The username associated with the package update request."""
+    """The username associated with the package update request."""

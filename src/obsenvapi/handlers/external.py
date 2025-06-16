@@ -3,7 +3,7 @@
 import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from safir.dependencies.logger import logger_dependency
 from safir.metadata import get_metadata
 from safir.models import ErrorDetail, ErrorLocation, ErrorModel
@@ -18,7 +18,7 @@ from ..models import (
     UpdatePackageVersion,
 )
 
-__all__ = ["get_index", "external_router"]
+__all__ = ["external_router", "get_index"]
 
 external_router = APIRouter()
 """FastAPI router for all external handlers."""
@@ -30,7 +30,6 @@ external_router = APIRouter()
         "Document the top-level API here. By default it only returns metadata"
         " about the application."
     ),
-    response_model=Index,
     response_model_exclude_none=True,
     summary="Application metadata",
 )
@@ -63,16 +62,19 @@ async def get_index(
 @external_router.get(
     "/package_versions",
     description="Get all the versions of the cloned packages.",
-    response_model=PackageVersionsResponseModel,
     summary="Package versions",
 )
 async def package_versions(
     logger: Annotated[BoundLogger, Depends(logger_dependency)],
+    request: Request,
 ) -> PackageVersionsResponseModel:
     """GET `/obsenv-api/package_versions` endpoint."""
     factory = Factory(logger=logger)
     service = factory.create_obsenv_manager_service()
-    pkg_list = service.get_package_versions()
+    username = request.headers.get("Obsenv-User-Name")
+    if username is None:
+        username = "nouser"
+    pkg_list = service.get_package_versions(username)
     fetch_datetime = datetime.datetime.now(datetime.UTC).isoformat()
     return PackageVersionsResponseModel.from_domain(
         fetch_datetime=fetch_datetime, pkg_list=pkg_list

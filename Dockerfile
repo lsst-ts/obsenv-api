@@ -52,12 +52,13 @@ FROM base-image AS runtime-image
 # Create a non-root user
 RUN groupadd --gid 72089 obsenv && \
   adduser --uid 72091 --gid 72089 --shell /bin/bash obsenv
+ENV USER=obsenv
 
 # Copy the virtualenv
 COPY --from=install-image /opt/venv /opt/venv
 
 # Setup the observing environment system
-COPY --from=install-image /ts_observing_environment/target/release/manage_obs_env /usr/local/bin
+COPY --from=install-image /ts_manage_observing_environment/target/release/manage_obs_env /usr/local/bin
 
 # Make sure we use the virtualenv
 ENV PATH="/opt/venv/bin:$PATH"
