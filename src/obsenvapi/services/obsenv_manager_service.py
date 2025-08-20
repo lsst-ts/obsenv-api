@@ -23,9 +23,10 @@ class ObsenvManagerService:
         self._logger = logger
         self._obsenv_store = obsenv_store
 
-    def get_package_versions(self) -> list[PackageInformation]:
+    def get_package_versions(self, username: str) -> list[PackageInformation]:
         self._logger.info("Retrive package versions from store.")
-        return self._obsenv_store.get_package_versions()
+        self._logger.info(f"Requested by {username}")
+        return self._obsenv_store.get_package_versions(username)
 
     def update_package_version(self, info: PackageUpdate) -> bool:
         mess = [
