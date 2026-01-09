@@ -20,7 +20,9 @@ class Store(ABC):
         self._parser = OutputParser(logger=logger)
 
     @abstractmethod
-    def get_package_versions(self) -> list[PackageInformation]: ...
+    def get_package_versions(
+        self, username: str
+    ) -> list[PackageInformation]: ...
 
     @abstractmethod
     def update_package_version(self, info: PackageUpdate) -> bool: ...

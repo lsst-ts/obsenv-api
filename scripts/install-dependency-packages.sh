@@ -36,6 +36,6 @@ rm -rf /var/lib/apt/lists/*
 curl https://sh.rustup.rs -sSf | bash -s -- -y
 source $HOME/.cargo/env
 
-git clone https://github.com/tribeiro/ts_observing_environment
-cd ts_observing_environment
+git clone https://github.com/lsst-ts/ts_manage_observing_environment
+cd ts_manage_observing_environment
 cargo build --release
